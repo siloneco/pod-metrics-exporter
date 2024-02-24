@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: pod-metrics-exporter
-          # NOTE: This software is not published in public registry, so you need to use our own registry
+          # NOTE: This software is not published in public registry, so you need to use your own registry
           # image: pod-metrics-exporter:latest
           ports:
             - containerPort: 3000
