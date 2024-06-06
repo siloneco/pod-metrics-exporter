@@ -1,0 +1,23 @@
+name: Test
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'renovate.json'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'renovate.json'
+
+jobs:
+  test:
+    if: ${{ github.event_name != 'pull_request' || github.repository != github.event.pull_request.head.repo.full_name }}
+    name: Cargo Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --all-features
