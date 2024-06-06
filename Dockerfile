@@ -1,5 +1,5 @@
 # Build application
-FROM rust:1.76-alpine3.18 AS builder
+FROM rust:1.78-alpine3.20 AS builder
 
 RUN apk add --no-cache openssl libc-dev openssl-dev
 
@@ -18,7 +18,7 @@ RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo build --release
 RUN strip /work/target/release/pod-metrics-exporter
 
 # Create runner image
-FROM alpine:3.18 AS runner
+FROM alpine:3.20 AS runner
 
 RUN apk add --no-cache libgcc openssl ca-certificates tini
 
