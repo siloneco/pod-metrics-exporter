@@ -11,7 +11,14 @@ pub fn parse_cpu_value(str: &str) -> Result<f64, String> {
 
     // Get the suffix of the string and convert to the milli core
     let suffix = str.chars().last().unwrap().to_ascii_lowercase();
-    let num_value = str[..str.len() - 1].parse::<f64>().unwrap();
+    let num_value = str[..str.len() - 1].parse::<f64>();
+
+    let num_value = match num_value {
+        Ok(value) => value,
+        Err(_) => {
+            return Err(format!("Unable to parse CPU value: {}", str));
+        }
+    };
 
     let result = match suffix {
         'n' => num_value / 1_000_000.0,
@@ -47,7 +54,14 @@ pub fn parse_memory_value(str: &str) -> Result<f64, String> {
 
     // Get the suffix of the string and convert to the MiB
     let suffix = &str[str.len() - 2..];
-    let num_value = str[..str.len() - 2].parse::<f64>().unwrap();
+    let num_value = str[..str.len() - 2].parse::<f64>();
+
+    let num_value = match num_value {
+        Ok(value) => value,
+        Err(_) => {
+            return Err(format!("Unable to parse memory value: {}", str));
+        }
+    };
 
     let result = match suffix {
         "Ki" => num_value / 1024.0,
@@ -73,6 +87,10 @@ mod tests {
         assert_eq!(parse_cpu_value("1u"), Ok(0.001));
         assert_eq!(parse_cpu_value("1n"), Ok(0.000001));
         assert_eq!(
+            parse_cpu_value("1xxx"),
+            Err("Unable to parse CPU value: 1xxx".to_string())
+        );
+        assert_eq!(
             parse_cpu_value("1x"),
             Err("Unknown CPU unit: 1x".to_string())
         );
@@ -85,6 +103,10 @@ mod tests {
         assert_eq!(parse_memory_value("1Mi"), Ok(1.0));
         assert_eq!(parse_memory_value("1Ki"), Ok(1.0 / 1024.0));
         assert_eq!(parse_memory_value("1Gi"), Ok(1024.0));
+        assert_eq!(
+            parse_memory_value("1xxx"),
+            Err("Unable to parse memory value: 1xxx".to_string())
+        );
         assert_eq!(
             parse_memory_value("1x"),
             Err("Unable to parse memory value: 1x".to_string())
