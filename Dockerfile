@@ -1,5 +1,5 @@
 # Build application
-FROM rust:1.81-alpine3.20 AS builder
+FROM rust:1.82-alpine3.20 AS builder
 
 RUN apk add --no-cache openssl libc-dev openssl-dev
 
