@@ -18,7 +18,7 @@ RUN RUSTFLAGS="-Ctarget-feature=-crt-static" cargo build --release
 RUN strip /work/target/release/pod-metrics-exporter
 
 # Create runner image
-FROM alpine:3.20 AS runner
+FROM alpine:3.21 AS runner
 
 RUN apk add --no-cache libgcc openssl ca-certificates tini
 
